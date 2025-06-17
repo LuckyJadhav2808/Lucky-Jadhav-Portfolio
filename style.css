@@ -1,0 +1,496 @@
+/* Enable smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Define CSS Variables for colors (default light mode) */
+:root {
+    --bg-color: #f0f0f0;
+    --card-bg: #fff;
+    --text-color: #333;
+    --subtle-text-color: #666;
+    --highlight-color: #ff8c00; /* Main accent color */
+    --border-color: #ddd;
+    --header-bg: #555;
+    --header-text: #fff;
+    --footer-text: #999;
+    --link-color: #007bff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode specific variables (overrides when checkbox is checked) */
+/* The key here is to target the .page-wrapper when the dark-mode-toggle checkbox is checked */
+#dark-mode-toggle:checked ~ .page-wrapper {
+    --bg-color: #1a1a2e;
+    --card-bg: #2d2d4d;
+    --text-color: #e0e0e0;
+    --subtle-text-color: #b0b0b0;
+    --highlight-color: #ff8c00;
+    --border-color: #4a4a6e;
+    --header-bg: #3c3c5e;
+    --header-text: #fff;
+    --footer-text: #888;
+    --link-color: #7abaff;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Hide the actual checkboxes */
+.hidden-toggle {
+    display: none;
+}
+
+/* Icon for dark mode toggle - change icon on checked state */
+#dark-mode-toggle:checked ~ .page-wrapper .icon-group .toggle-icon .fa-sun::before {
+    content: "\f186"; /* Unicode for fa-moon */
+}
+/* Ensure the .fa-moon also has its default styles for sizing etc */
+#dark-mode-toggle:checked ~ .page-wrapper .icon-group .toggle-icon .fa-moon {
+    display: inline-block; /* Make sure it's visible if changed from sun */
+}
+
+
+/* Base styles applying variables */
+body {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    /* Body now primarily controls the global font/margin */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* The page wrapper will take care of background and text color transitions */
+.page-wrapper {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.5s ease, color 0.5s ease;
+    width: 100%; /* Ensure it spans the width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 50px; /* Padding for the entire page content */
+}
+
+.container {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    /* --- CHANGES HERE --- */
+    width: 90%; /* Changed from 80% to utilize more screen width */
+    max-width: 1200px; /* Increased from 800px for wider screens */
+    /* --- END CHANGES --- */
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.icon-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Styles for the toggle labels (which act as buttons) */
+.toggle-icon {
+    display: inline-block; /* Ensures consistent sizing and clickable area */
+    font-size: 1.5em; /* Match sun icon size */
+    color: var(--subtle-text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+.toggle-icon:hover {
+    color: var(--highlight-color);
+}
+.toggle-icon i {
+    pointer-events: none; /* Prevents icon itself from interfering with label click */
+}
+
+/* Resume Download Button Styles */
+.header-button {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--subtle-text-color);
+    font-size: 1em;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.header-button i {
+    margin-right: 5px;
+    font-size: 1.5em;
+    color: var(--subtle-text-color);
+    transition: color 0.3s ease;
+}
+
+.header-button:hover {
+    color: var(--highlight-color);
+}
+
+.header-button:hover i {
+    color: var(--highlight-color);
+}
+
+.star-icon {
+    /* The label wraps the icon, so star-icon styles apply to the label */
+    font-size: 2em; /* For the label's icon */
+    color: var(--highlight-color); /* For the label's icon */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Star Functionality CSS: Change color/animation when its checkbox is checked */
+#star-function-toggle:checked ~ .page-wrapper .star-icon {
+    color: gold; /* Change color when "favorited" */
+    animation: pulse 0.5s ease-in-out;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* The "card" styles */
+.main-card {
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: var(--card-bg);
+    display: block;
+    transition: background-color 0.5s ease, border-color 0.5s ease;
+}
+
+.card-header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 10px 20px;
+    font-weight: bold;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.card-content {
+    padding: 40px 30px;
+    text-align: center;
+    color: var(--text-color);
+}
+
+/* Profile Picture Styles */
+.profile-pic-container {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--highlight-color);
+    box-shadow: 0 0 15px var(--shadow-color);
+    transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+
+.greeting {
+    font-size: 3em;
+    margin-bottom: 10px;
+    color: var(--text-color);
+    transition: color 0.5s ease;
+}
+
+.greeting .highlight {
+    color: var(--highlight-color);
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: var(--subtle-text-color);
+    transition: color 0.5s ease;
+}
+
+.navigation-icons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.nav-item i {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: var(--subtle-text-color);
+    transition: color 0.3s ease;
+}
+
+.nav-item:hover {
+    color: var(--highlight-color);
+}
+
+.nav-item:hover i {
+    color: var(--highlight-color);
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-item {
+    font-size: 2em;
+    color: var(--subtle-text-color);
+    transition: color 0.3s ease;
+}
+
+.social-item:hover {
+    color: var(--highlight-color);
+}
+
+.footer-copyright {
+    text-align: center;
+    color: var(--footer-text);
+    font-size: 0.9em;
+    margin-top: 20px;
+    transition: color 0.5s ease;
+}
+
+/* Section Styles for single-page layout */
+.content-section {
+    /* --- CHANGES HERE --- */
+    width: 90%; /* Changed from 80% to utilize more screen width */
+    max-width: 1200px; /* Increased from 800px for wider screens */
+    /* --- END CHANGES --- */
+    margin: 30px auto; /* Changed margin to auto for horizontal centering */
+    box-sizing: border-box;
+}
+
+.section-card {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    width: 100%;
+    overflow: hidden;
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.section-card .card-header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.section-card .card-content {
+    padding: 30px;
+    text-align: left;
+    line-height: 1.6;
+    color: var(--text-color);
+    transition: color 0.5s ease;
+}
+
+.section-card .card-content h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--highlight-color);
+}
+
+.section-card .card-content ul {
+    list-style: disc;
+    margin-left: 20px;
+    padding: 0;
+}
+
+.section-card .card-content li {
+    margin-bottom: 5px;
+}
+
+.section-card .card-content a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.section-card .card-content a:hover {
+    text-decoration: underline;
+    color: var(--highlight-color);
+}
+
+.project-item {
+    margin-bottom: 25px;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 15px;
+    transition: border-color 0.5s ease;
+}
+
+.project-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.project-item h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: var(--text-color);
+    transition: color 0.5s ease;
+}
+
+.social-icons-contact {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.social-icons-contact a {
+    font-size: 2em;
+    color: var(--subtle-text-color);
+    transition: color 0.3s ease;
+}
+
+.social-icons-contact a:hover {
+    color: var(--highlight-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container,
+    .content-section {
+        width: 95%;
+        padding: 15px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .container {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+    .content-section {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+    }
+
+    .greeting {
+        font-size: 2.5em;
+    }
+
+    .subtitle {
+        font-size: 1em;
+    }
+
+    .navigation-icons {
+        flex-direction: row;
+        gap: 15px;
+        justify-content: space-around;
+    }
+
+    .nav-item {
+        font-size: 0.8em;
+    }
+
+    .nav-item i {
+        font-size: 2em;
+    }
+
+    .social-icons {
+        gap: 15px;
+    }
+
+    .footer-copyright {
+        font-size: 0.8em;
+    }
+
+    .section-card .card-content {
+        padding: 20px;
+    }
+
+    .section-card .card-content h3 {
+        font-size: 1.2em;
+    }
+
+    .section-card .card-content p, .section-card .card-content li {
+        font-size: 0.9em;
+    }
+
+    .social-icons-contact a {
+        font-size: 1.8em;
+    }
+
+    .icon-group {
+        gap: 8px;
+    }
+    .header-button {
+        font-size: 0.9em;
+    }
+    .header-button i {
+        font-size: 1.2em;
+        margin-right: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+    }
+
+    .greeting {
+        font-size: 2em;
+    }
+
+    .navigation-icons {
+        gap: 10px;
+        font-size: 0.7em;
+    }
+
+    .nav-item i {
+        font-size: 1.5em;
+    }
+
+    .social-item {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 375px) {
+    .navigation-icons {
+        gap: 8px;
+        font-size: 0.65em;
+    }
+    .profile-picture {
+        width: 80px;
+        height: 80px;
+    }
+}
