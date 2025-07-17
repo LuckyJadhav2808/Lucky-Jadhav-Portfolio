@@ -1,9 +1,8 @@
-/* Enable smooth scrolling for anchor links */
+
 html {
     scroll-behavior: smooth;
 }
 
-/* Define CSS Variables for colors (default light mode) */
 :root {
     --bg-color: #f0f0f0;
     --card-bg: #fff;
@@ -18,8 +17,6 @@ html {
     --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Dark Mode specific variables (overrides when checkbox is checked) */
-/* The key here is to target the .page-wrapper when the dark-mode-toggle checkbox is checked */
 #dark-mode-toggle:checked ~ .page-wrapper {
     --bg-color: #1a1a2e;
     --card-bg: #2d2d4d;
@@ -34,26 +31,21 @@ html {
     --shadow-color: rgba(0, 0, 0, 0.4);
 }
 
-/* Hide the actual checkboxes */
 .hidden-toggle {
     display: none;
 }
 
-/* Icon for dark mode toggle - change icon on checked state */
 #dark-mode-toggle:checked ~ .page-wrapper .icon-group .toggle-icon .fa-sun::before {
-    content: "\f186"; /* Unicode for fa-moon */
+    content: "\f186"; 
 }
-/* Ensure the .fa-moon also has its default styles for sizing etc */
+
 #dark-mode-toggle:checked ~ .page-wrapper .icon-group .toggle-icon .fa-moon {
-    display: inline-block; /* Make sure it's visible if changed from sun */
+    display: inline-block; 
 }
 
-
-/* Base styles applying variables */
 body {
     margin: 0;
     font-family: 'Nunito', sans-serif;
-    /* Body now primarily controls the global font/margin */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -62,7 +54,6 @@ body {
     position: relative;
 }
 
-/* The page wrapper will take care of background and text color transitions */
 .page-wrapper {
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -78,10 +69,8 @@ body {
     background-color: var(--card-bg);
     border-radius: 20px;
     box-shadow: 0 10px 30px var(--shadow-color);
-    /* --- CHANGES HERE --- */
     width: 90%; /* Changed from 80% to utilize more screen width */
     max-width: 1200px; /* Increased from 800px for wider screens */
-    /* --- END CHANGES --- */
     padding: 20px;
     box-sizing: border-box;
     z-index: 1;
@@ -106,10 +95,9 @@ body {
     gap: 15px;
 }
 
-/* Styles for the toggle labels (which act as buttons) */
 .toggle-icon {
-    display: inline-block; /* Ensures consistent sizing and clickable area */
-    font-size: 1.5em; /* Match sun icon size */
+    display: inline-block; 
+    font-size: 1.5em; 
     color: var(--subtle-text-color);
     cursor: pointer;
     transition: color 0.3s ease;
@@ -118,10 +106,9 @@ body {
     color: var(--highlight-color);
 }
 .toggle-icon i {
-    pointer-events: none; /* Prevents icon itself from interfering with label click */
+    pointer-events: none; 
 }
-
-/* Resume Download Button Styles */
+/*resume*/
 .header-button {
     display: flex;
     align-items: center;
@@ -284,12 +271,9 @@ body {
     transition: color 0.5s ease;
 }
 
-/* Section Styles for single-page layout */
 .content-section {
-    /* --- CHANGES HERE --- */
     width: 90%; /* Changed from 80% to utilize more screen width */
     max-width: 1200px; /* Increased from 800px for wider screens */
-    /* --- END CHANGES --- */
     margin: 30px auto; /* Changed margin to auto for horizontal centering */
     box-sizing: border-box;
 }
